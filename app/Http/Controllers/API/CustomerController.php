@@ -57,18 +57,31 @@ class CustomerController extends Controller
         $token = $customer->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'token'=> $token,
+            'token' => $token,
         ]);
     }
 
-    function getcustomerinfo(){
-        
+    function logout(Request $request)
+    {
+        if ($request->user()) {
+            $request->user()->tokens()->delete();
+
+            return response()->json([
+                'message' => 'User Logged Out Successfully',
+            ], 200);
+        } else {
+            // Even if user not authenticated, return success
+            return response()->json([
+                'message' => 'Already Logged Out',
+            ], 200);
+        }
     }
 
-    function authenticated(){
-        $status = Auth::check() ? true:false;
-        return response()->json([
-            'status'=>$status,
-        ]);
-    }
+    // function authenticated()
+    // {
+    //     $status = Auth::check() ? true : false;
+    //     return response()->json([
+    //         'status' => $status,
+    //     ]);
+    // }
 }
