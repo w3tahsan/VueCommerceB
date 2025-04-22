@@ -11,4 +11,5 @@ Route::get('customer/info', function (Request $request) {
 Route::post('customer/register', [CustomerController::class, 'register']);
 Route::post('customer/login', [CustomerController::class, 'login']);
 Route::post('customer/logout', [CustomerController::class, 'logout']);
-// Route::get('authenticated', [CustomerController::class, 'authenticated']);
+Route::post('customer/update/{id}', [CustomerController::class, 'customer_update']);
+

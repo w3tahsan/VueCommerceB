@@ -70,18 +70,62 @@ class CustomerController extends Controller
                 'message' => 'User Logged Out Successfully',
             ], 200);
         } else {
-            // Even if user not authenticated, return success
             return response()->json([
-                'message' => 'Already Logged Out',
+                'message
+                ' => 'Already Logged Out',
             ], 200);
         }
     }
 
-    // function authenticated()
-    // {
-    //     $status = Auth::check() ? true : false;
-    //     return response()->json([
-    //         'status' => $status,
-    //     ]);
-    // }
+    function customer_update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+        ]);
+        if ($request->current_password == '') {
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required',
+            ]);
+            try {
+                $customer = Customer::find($id);
+                Customer::find($customer->id)->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'address' => $request->address,
+                ]);
+                return response()->json([
+                    'success' => 'Customer Updated'
+                ]);
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'error' => 'something went wrong',
+                ]);
+            }
+        } else {
+            try {
+                $customer = Customer::find($id);
+                if (password_verify($request->current_password, $customer->first()->password)) {
+                    Customer::find($customer->id)->update([
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'password' => bcrypt($request->password),
+                        'address' => $request->address,
+                    ]);
+                    return response()->json([
+                        'success' => 'Customer Updated'
+                    ]);
+                } else {
+                    return response()->json([
+                        'passErr' => 'Current Password not Matched'
+                    ]);
+                }
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'error' => 'something went wrong',
+                ]);
+            }
+        }
+    }
 }
