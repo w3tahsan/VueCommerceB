@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\ProductController;
@@ -23,3 +24,7 @@ Route::get('all/category', [CategoryController::class, 'all_category']);
 Route::get('all/product', [ProductController::class, 'product']);
 Route::get('new/product', [ProductController::class, 'new_product']);
 Route::get('product/details/{id}', [ProductController::class, 'product_details']);
+
+//Cart
+Route::post('add/to/cart', [CartController::class, 'add_cart']);
+Route::get('cart/{id}', [CartController::class, 'cart']);
