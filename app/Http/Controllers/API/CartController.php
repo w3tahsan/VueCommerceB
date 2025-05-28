@@ -31,11 +31,31 @@ class CartController extends Controller
         ]);
     }
 
-    function cart($id){
-        $carts = Cart::where('customer_id', $id)->get();
+    function cart($id)
+    {
+        $carts = Cart::with('rel_to_product')->where('customer_id', $id)->get();
+
+        $carts->each(function ($cart) {
+            $cart->inventory = $cart->inventory; // trigger accessor manually
+        });
 
         return response()->json([
-            'carts'=>$carts,
+            'carts' => $carts,
+        ]);
+    }
+
+    function update_cart(Request $request)
+    {
+        $carts = $request->input('carts'); // Properly access the array
+
+        foreach ($carts as $cart) {
+            Cart::where('id', $cart['id'])->update([
+                'quantity' => $cart['quantity']
+            ]);
+        }
+
+        return response()->json([
+            'success' => 'Cart Updated',
         ]);
     }
 }

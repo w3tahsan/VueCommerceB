@@ -28,3 +28,4 @@ Route::get('product/details/{id}', [ProductController::class, 'product_details']
 //Cart
 Route::post('add/to/cart', [CartController::class, 'add_cart']);
 Route::get('cart/{id}', [CartController::class, 'cart']);
+Route::post('update/cart', [CartController::class, 'update_cart']);
